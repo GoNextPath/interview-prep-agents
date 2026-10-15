@@ -1,6 +1,6 @@
 # interview-prep-agents
 
-An open-source **multi-agent pipeline for interview practice**, built by the Leopard AI Study Group.
+An open-source **multi-agent pipeline for interview practice**, built by the Leopard Community.
 
 Four small agents each do one job and pass their results along:
 
