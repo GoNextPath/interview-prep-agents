@@ -2,23 +2,46 @@
 
 Thanks for helping! Contributing is optional and self-paced. Most building happens between study group sessions.
 
+You don't need write access to this repo or membership in the GoNextPath org. Contributions come in as pull requests from your own fork.
+
 ## Getting set up
 
+Fork this repo first - use the Fork button at the top right of the repo page. You'll get your own copy at https://github.com/<your-username>/interview-prep-agents
+
+Then clone your fork and set up the environment:
+
 ```bash
-git clone https://github.com/GoNextPath/interview-prep-agents.git
+git clone https://github.com/<your-username>/interview-prep-agents.git
 cd interview-prep-agents
+git remote add upstream https://github.com/GoNextPath/interview-prep-agents.git
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 pytest
 ```
 
+`origin` is your fork, which is where you push. `upstream` is this repo, which is where pull requests go.
+
 ## How we work
 
 1. **Pick up an issue** for your area (see [docs/teams.md](docs/teams.md)), or open one describing what you plan to do.
-2. **Branch** from `main`: `git checkout -b <area>/<short-description>`, e.g. `evaluator/rubric-v1`.
-3. **Keep PRs small** and focused on one thing. Add or update tests.
-4. **Run checks** before pushing: `ruff check . && pytest`.
-5. **Open a PR**, fill in the template, and ask someone from your team to review. Changes to `src/interview_prep/models.py` need a reviewer from each affected team.
+2. **Sync your fork** before you start: `git checkout main && git pull upstream main`.
+3. **Branch** from `main`: `git checkout -b <area>/<short-description>`, e.g. `evaluator/rubric-v1`.
+4. **Keep PRs small** and focused on one thing. Add or update tests.
+5. **Run checks** before pushing: `ruff check . && pytest`.
+6. **Push to your fork**: `git push origin <branch-name>`.
+7. **Open a PR** against `GoNextPath/interview-prep-agents`, fill in the template, and ask someone from your team to review. Changes to `src/interview_prep/models.py` need a reviewer from each affected team.
+
+After you push, GitHub usually shows a "Compare & pull request" banner on your fork. That is the quickest way to open the PR.
+
+## Keeping your fork up to date
+
+```bash
+git checkout main
+git pull upstream main
+git push origin main
+```
+
+Worth doing before each new branch so you are not building against stale code.
 
 ## Ground rules
 
@@ -33,4 +56,4 @@ We haven't set a policy yet (it's in [docs/decisions.md](docs/decisions.md)). Un
 
 ## Getting credit
 
-Every merged PR shows up in the repo's contributor history under your GitHub account, so use the account you want on your portfolio.
+Every merged PR shows up in the repo's contributor history under your GitHub account, so use the account you want on your portfolio. A pull request from your fork counts exactly the same as one opened from a branch here.
