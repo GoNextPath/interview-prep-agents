@@ -25,6 +25,7 @@ permissions:
 jobs:
   digest:
     runs-on: ubuntu-latest
+    environment: Development
     steps:
       - name: Check Slack webhook is configured
         id: check
