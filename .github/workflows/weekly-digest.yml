@@ -1,0 +1,105 @@
+# Commit to: .github/workflows/weekly-digest.yml
+#
+# Setup required before this works:
+#   1. Create a Slack incoming webhook for #ai-study-group-group-project
+#      (via the Slack app manifest, or api.slack.com/apps > From scratch > Incoming Webhooks)
+#   2. Add the webhook URL as a repo secret named SLACK_WEBHOOK_URL
+#      (Settings > Secrets and variables > Actions > New repository secret)
+#
+# Until that secret exists, this workflow runs and skips cleanly.
+# Runs Mondays at 9am PT. Can also be triggered by hand from the Actions tab.
+
+name: Weekly digest
+
+on:
+  schedule:
+    - cron: "0 16 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+  discussions: read
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    environment: Development
+    steps:
+      - name: Check Slack webhook is configured
+        id: check
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          if [ -z "${SLACK_WEBHOOK_URL}" ]; then
+            echo "SLACK_WEBHOOK_URL is not set - skipping. Add the secret to enable this."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build and post digest
+        if: steps.check.outputs.ready == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          OWNER="${REPO%/*}"
+          NAME="${REPO#*/}"
+          CUTOFF=$(date -u -d '7 days ago' +%Y-%m-%dT%H:%M:%SZ)
+
+          # --- open discussions, with reply counts and last activity ---
+          DISCUSSIONS=$(gh api graphql -f query='
+            query($owner: String!, $name: String!) {
+              repository(owner: $owner, name: $name) {
+                discussions(first: 20, states: OPEN, orderBy: {field: UPDATED_AT, direction: DESC}) {
+                  nodes { number title url comments { totalCount } updatedAt }
+                }
+              }
+            }' -F owner="$OWNER" -F name="$NAME" \
+            --jq '.data.repository.discussions.nodes')
+
+          DISC_LINES=$(echo "$DISCUSSIONS" | jq -r '
+            map("- <\(.url)|#\(.number) \(.title)> (\(.comments.totalCount) replies)")
+            | if length == 0 then "_No open discussions._" else join("\n") end')
+
+          QUIET=$(echo "$DISCUSSIONS" | jq -r --arg cutoff "$CUTOFF" '
+            map(select(.comments.totalCount == 0 or .updatedAt < $cutoff)) | length')
+
+          # --- issues and PRs ---
+          OPEN_ISSUES=$(gh issue list --repo "$REPO" --state open --limit 100 --json number | jq 'length')
+          OPEN_PRS=$(gh pr list --repo "$REPO" --state open --limit 100 --json number,title,url,author)
+          PR_COUNT=$(echo "$OPEN_PRS" | jq 'length')
+
+          PR_LINES=$(echo "$OPEN_PRS" | jq -r '
+            map("- <\(.url)|#\(.number) \(.title)> by @\(.author.login)")
+            | if length == 0 then "_No open PRs._" else join("\n") end')
+
+          MERGED_RAW=$(gh pr list --repo "$REPO" --state merged --limit 100 --json number,title,url,mergedAt)
+          MERGED=$(echo "$MERGED_RAW" | jq --arg cutoff "$CUTOFF" '[.[] | select(.mergedAt > $cutoff)]')
+          MERGED_COUNT=$(echo "$MERGED" | jq 'length')
+          MERGED_LINES=$(echo "$MERGED" | jq -r '
+            map("- <\(.url)|#\(.number) \(.title)>")
+            | if length == 0 then "_Nothing merged this week._" else join("\n") end')
+
+          # --- assemble ---
+          TEXT=$(printf '%s\n' \
+            "*Weekly digest - interview-prep-agents*" \
+            "" \
+            "*Merged this week (${MERGED_COUNT})*" \
+            "${MERGED_LINES}" \
+            "" \
+            "*Open PRs (${PR_COUNT})*" \
+            "${PR_LINES}" \
+            "" \
+            "*Design discussions*" \
+            "${DISC_LINES}" \
+            "" \
+            "${OPEN_ISSUES} open issue(s). ${QUIET} discussion(s) with no replies or quiet for a week.")
+
+          jq -n --arg text "$TEXT" '{text: $text}' > payload.json
+          curl -sS -X POST -H 'Content-type: application/json' --data @payload.json "$SLACK_WEBHOOK_URL"
