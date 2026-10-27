@@ -1,0 +1,50 @@
+# Lets anyone self-assign an issue by commenting /assign, and release it with /unassign.
+#
+# Why this exists: GitHub only allows assigning people who have repo access, and our
+# contributors work from forks rather than being org members. This workflow does the
+# assignment on their behalf using the repo token.
+
+name: Assign command
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  issues: write
+
+jobs:
+  assign:
+    # Ignore comments on pull requests, and anything that isn't the command.
+    if: >-
+      github.event.issue.pull_request == null &&
+      (startsWith(github.event.comment.body, '/assign') ||
+       startsWith(github.event.comment.body, '/unassign'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign or unassign the commenter
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          ISSUE: ${{ github.event.issue.number }}
+          ACTOR: ${{ github.event.comment.user.login }}
+          BODY: ${{ github.event.comment.body }}
+        run: |
+          set -euo pipefail
+
+          if [[ "$BODY" == /unassign* ]]; then
+            gh issue edit "$ISSUE" --repo "$REPO" --remove-assignee "$ACTOR"
+            echo "Unassigned $ACTOR from #$ISSUE"
+            exit 0
+          fi
+
+          # Already taken by someone else? Say so instead of silently stacking assignees.
+          CURRENT=$(gh issue view "$ISSUE" --repo "$REPO" --json assignees --jq '[.assignees[].login] | join(",")')
+
+          if [ -n "$CURRENT" ] && [[ ",$CURRENT," != *",$ACTOR,"* ]]; then
+            gh issue comment "$ISSUE" --repo "$REPO" --body "This one is already assigned to @${CURRENT}. Check with them before picking it up, or comment /assign anyway once they've released it with /unassign."
+            exit 0
+          fi
+
+          gh issue edit "$ISSUE" --repo "$REPO" --add-assignee "$ACTOR"
+          echo "Assigned $ACTOR to #$ISSUE"
