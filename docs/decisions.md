@@ -16,5 +16,5 @@ When a question gets settled, move it to **Decided** with the date and a one-lin
 - Python 3.10+, with `pytest` for tests and `ruff` for linting (easy to revisit).
 - **Contributing by fork and PR** (Oct 2026): contributors fork the repo and open PRs from their fork rather than being added to the GoNextPath org. The group is 20+ people, org seats aren't needed for this, and a PR from a fork earns the same contributor credit. Knock-on effect: CODEOWNERS isn't usable, since GitHub only auto-requests review from people with write access, so the `models.py` review rule stays a convention in CONTRIBUTING.
 - **Branch protection on `main`** (Oct 2026): pull requests required, force pushes and deletions blocked, 0 required approvals for now. Worth revisiting once there are co-maintainers to review.
-- **AI-written PRs:** do we accept and review PRs written by AI tools? If so, what disclosure do we require? *(Laurie)* - See [PR #50](https://github.com/GoNextPath/interview-prep-agents/pull/20) - docs: add section on AI-assisted contributions.
+- **AI-written PRs:** do we accept and review PRs written by AI tools? If so, what disclosure do we require? *(Laurie)* - See [PR #20](https://github.com/GoNextPath/interview-prep-agents/pull/20) - docs: add section on AI-assisted contributions.
 
