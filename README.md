@@ -31,11 +31,17 @@ cd interview-prep-agents
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 
-pytest                     # run the tests
+ruff check . && pytest     # lint and run the tests (do this before every push)
 python -m interview_prep   # run one question through the whole pipeline
 ```
 
-Requires Python 3.10+.
+Requires Python 3.10+. Check with `python3 --version`. macOS ships with Python 3.9, so on a Mac install a newer one with [Homebrew](https://brew.sh) (`brew install python@3.11`) and create the environment with `python3.11 -m venv .venv` instead.
+
+`python -m interview_prep` asks you to type an answer. To run it without typing, for example in a script, pass one: `python -m interview_prep --answer "your answer"`. Other options are `--topic` and `--difficulty easy|medium|hard`.
+
+To contribute, fork the repo and clone your fork instead. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+> **Using Claude Code Desktop?** [`docs/local_setup_ClaudeCodeDesktop.md`](docs/local_setup_ClaudeCodeDesktop.md) shows how to do this setup, run the checks and open a PR from inside the app. The commands themselves live only here.
 
 ## Repo layout
 
