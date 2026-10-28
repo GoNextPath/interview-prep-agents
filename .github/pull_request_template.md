@@ -8,7 +8,7 @@
 - [ ] Repo Infrastructure / docs
 
 ## Checklist
-- [ ] `ruff check . && pytest` passes
+- [ ] `uv run ruff check . && uv run pytest` passes
 - [ ] Tests added or updated
 - [ ] No secrets or personal data committed
 - [ ] If AI tools wrote a significant part of this, I've said so here and I understand the code

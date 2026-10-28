@@ -13,7 +13,7 @@ flowchart LR
 ```
 
 | Agent | Job | Lives in |
-|---|---|---|
+| --- | --- | --- |
 | Question Generator | Creates interview questions by topic and difficulty | `src/interview_prep/agents/question_generator.py` |
 | Answer Evaluator | Scores a practice answer against a rubric | `src/interview_prep/agents/answer_evaluator.py` |
 | Feedback Agent | Turns a score into specific, actionable feedback | `src/interview_prep/agents/feedback.py` |
@@ -23,23 +23,45 @@ The shared data types the agents pass to each other are in `src/interview_prep/m
 
 > **Status:** early scaffold. Every agent is a stub that returns placeholder output so the pipeline runs end to end. Teams replace the stubs with real implementations.
 
+## Prerequisites
+
+- **Git**
+- **[uv](https://docs.astral.sh/uv/)**, which manages Python, the virtual environment and dependencies. Install it once:
+
+  | Platform | Command |
+  | --- | --- |
+  | macOS / Linux | `curl -LsSf https://astral.sh/uv/install.sh \| sh` (or `brew install uv`) |
+  | Windows | `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 \| iex"` (or `winget install --id=astral-sh.uv -e`) |
+  | Any, with Python already installed | `pipx install uv` |
+
+  Check it worked with `uv --version`. See the [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/) for other options.
+
+You don't need to install Python separately: if `uv sync` can't find Python 3.10 or newer, it downloads one. You only need your own Python 3.10+ if you use the [pip workflow](#pip-workflow) below.
+
 ## Quick start
 
 ```bash
 git clone https://github.com/GoNextPath/interview-prep-agents.git
 cd interview-prep-agents
-python -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev]"
+uv sync --extra dev               # create .venv and install from uv.lock
 
-pytest                     # run the tests
-python -m interview_prep   # run one question through the whole pipeline
+uv run pytest                     # run the tests
+uv run python -m interview_prep   # run one question through the whole pipeline
 ```
 
-Requires Python 3.10+.
+### pip workflow
+
+Steps if you prefer to use pip.  Note: pip doesn't read uv.lock, so the versions on your local may be different than what is used in CI.
+
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+pytest
+```
 
 ## Repo layout
 
-```
+```bash
 src/interview_prep/
   models.py          # shared data types (the contract between agents)
   pipeline.py        # wires the four agents together
