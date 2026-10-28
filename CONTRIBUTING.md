@@ -27,7 +27,7 @@ pytest
 2. **Sync your fork** before you start: `git checkout main && git pull upstream main`.
 3. **Branch** from `main`: `git checkout -b <area>/<short-description>`, e.g. `evaluator/rubric-v1`.
 4. **Keep PRs small** and focused on one thing. Add or update tests.
-5. **Run checks** before pushing: `ruff check . && pytest`.
+5. **Run checks** before pushing: `ruff check . && pytest --cov`. CI also fails below 80% coverage, so `pytest --cov` shows you the same number before you push.
 6. **Push to your fork**: `git push origin <branch-name>`.
 7. **Open a PR** against `GoNextPath/interview-prep-agents`, fill in the template, and ask someone from your team to review. Changes to `src/interview_prep/models.py` need a reviewer from each affected team.
 

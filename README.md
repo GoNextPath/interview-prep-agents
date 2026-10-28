@@ -32,6 +32,7 @@ python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 
 pytest                     # run the tests
+pytest --cov               # run the tests with a coverage report
 python -m interview_prep   # run one question through the whole pipeline
 ```
 
