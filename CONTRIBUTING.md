@@ -56,7 +56,7 @@ AI coding assistants may be used and are subject to the project's existing secur
 
 - The developer is responsible for all changes in a PR.
 - AI can be used to draft commit comments, PR descriptions, PR comments.
-- Disclose in the PR description or comment if an ai assistant was the primary author, and specify which assistant was used.
+- Disclose in the PR description or comment if an AI assistant was the primary author, and specify which assistant was used.
 - Keep PRs reasonably scoped so they can be reviewed by humans.
 
 ## Getting credit
