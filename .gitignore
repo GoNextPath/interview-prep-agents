@@ -10,3 +10,7 @@ venv/
 .ruff_cache/
 .ipynb_checkpoints/
 .DS_Store
+
+# Local CLI diagnostics
+*.log
+logs/

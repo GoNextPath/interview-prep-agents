@@ -8,7 +8,7 @@ When a question gets settled, move it to **Decided** with the date and a one-lin
 - **Security:** prompt injection, compromised models, sensitive assets, package audits. This matters because the project is open source and uses AI. *(Shannon)* Starting point: [SECURITY.md](../SECURITY.md).
 - **AI-written PRs:** do we accept and review PRs written by AI tools? If so, what disclosure do we require? *(Laurie)*
 - **Frontend:** its own team, or part of Infra?
-- **Model provider and cost:** which LLM API(s) to use, and how to keep costs under control. *(Angelica)*
+- **Model provider and cost:** which LLM API(s) to use, and how to keep costs under control. *(Angelica)* Proposed [ADR 0001](adr/0001-configurable-llm-clients.md) adds a provider-independent client and mock defaults; the team still chooses production models and budgets.
 - **Milestones:** set the deliverable milestones. *(Chen)*
 
 ## Decided

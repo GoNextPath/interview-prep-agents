@@ -11,6 +11,8 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      LLM_MODE: mock
     strategy:
       matrix:
         python-version: ["3.10", "3.12"]
@@ -19,6 +21,23 @@ jobs:
       - uses: astral-sh/setup-uv@v10.3.2
         with:
           python-version: ${{ matrix.python-version }}
+      - run: uv sync --locked --extra dev --extra openai --extra telemetry
+      - run: uv run --locked ruff check .
+      - name: Offline unit and recorded-transport tests
+        run: uv run --locked pytest tests
+
+  minimal-client:
+    runs-on: ubuntu-latest
+    env:
+      LLM_MODE: mock
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.2
+        with:
+          python-version: "3.12"
       - run: uv sync --locked --extra dev
-      - run: uv run ruff check .
-      - run: uv run pytest
+      - name: Verify credential-free client imports without optional SDKs
+        run: >-
+          uv run --locked pytest tests/test_pipeline.py tests/test_question_generator.py
+          tests/test_answer_evaluator.py tests/test_feedback.py tests/test_metrics.py
+          tests/test_telemetry.py::test_error_context_without_telemetry

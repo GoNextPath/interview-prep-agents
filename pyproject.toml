@@ -13,6 +13,8 @@ dependencies = []
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.5"]
+openai = ["openai>=1.54,<3"]
+telemetry = ["opentelemetry-api>=1.27,<2", "opentelemetry-sdk>=1.27,<2", "opentelemetry-exporter-otlp-proto-http>=1.27,<2"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -23,3 +25,7 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 110
 target-version = "py310"
+
+[tool.setuptools.package-data]
+"interview_prep.llm" = ["models.json"]
+"interview_prep.agents" = ["agents.json"]

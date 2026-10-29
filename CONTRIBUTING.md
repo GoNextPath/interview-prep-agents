@@ -26,6 +26,15 @@ If you change dependencies in `pyproject.toml`, run `uv lock` and commit the upd
 
 `origin` is your fork, which is where you push. `upstream` is this repo, which is where pull requests go.
 
+Use `make help` to discover development commands, or `make check` to run Ruff and offline tests.
+The Makefile uses the project virtual environment when present.
+
+Tests need no model credentials and block outbound connections, including local model servers.
+For model selection, dependency injection, and optional provider tests, see [model configuration](docs/llm.md).
+Its [code organization map](docs/llm-architecture.md#code-organization) shows where to add providers, configuration
+validators, telemetry, and progress behavior. Install `.[dev,openai,telemetry]` to exercise all
+offline SDK/telemetry tests; `.[dev]` remains sufficient for core development.
+
 ## How we work
 
 1. **Pick up an issue** for your area (see [docs/teams.md](docs/teams.md)), or open one describing what you plan to do. Comment `/assign` on the issue so everyone can see it's taken - a bot will assign it to you. Use `/unassign` if you end up not having time, so someone else can pick it up. You can also add labels with `/label bug, documentation` (and `/unlabel` to remove them) - the label has to exist already.

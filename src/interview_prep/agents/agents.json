@@ -1,0 +1,5 @@
+{
+  "question_generator": "mock",
+  "answer_evaluator": "mock",
+  "feedback": "mock"
+}

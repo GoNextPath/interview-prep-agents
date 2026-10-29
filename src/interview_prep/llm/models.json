@@ -1,0 +1,24 @@
+{
+  "default": "mock",
+  "models": {
+    "mock": {
+      "provider": "mock",
+      "model": "fixture"
+    },
+    "openai-fast": {
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "api_key_env": "OPENAI_API_KEY"
+    },
+    "openai-quality": {
+      "provider": "openai",
+      "model": "gpt-4.1",
+      "api_key_env": "OPENAI_API_KEY"
+    },
+    "local": {
+      "provider": "ollama",
+      "model": "llama3.2",
+      "base_url": "http://localhost:11434"
+    }
+  }
+}
