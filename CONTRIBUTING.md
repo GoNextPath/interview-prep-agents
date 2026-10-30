@@ -52,7 +52,12 @@ Worth doing before each new branch so you are not building against stale code.
 
 ## AI-assisted contributions
 
-We haven't set a policy yet (it's in [docs/decisions.md](docs/decisions.md)). Until we do: you may use AI tools, but you must understand and be able to explain every line you submit, and please say in the PR description if AI wrote a significant part of it.
+AI coding assistants may be used and are subject to the project's existing security and data-handling requirements.
+
+- The developer is responsible for all changes in a PR.
+- AI can be used to draft commit comments, PR descriptions, PR comments.
+- Disclose in the PR description or comment if an AI assistant was the primary author, and specify which assistant was used.
+- Keep PRs reasonably scoped so they can be reviewed by humans.
 
 ## Getting credit
 
