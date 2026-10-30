@@ -21,4 +21,12 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: pip install -e ".[dev]"
       - run: ruff check .
-      - run: pytest
+      - run: pytest --cov --cov-report=term-missing --cov-fail-under=80
+      - name: Publish the coverage summary
+        if: always()
+        run: |
+          {
+            echo "### Test coverage (Python ${{ matrix.python-version }})"
+            echo
+            python -m coverage report --format=markdown || echo "No coverage data was collected."
+          } >> "$GITHUB_STEP_SUMMARY"
