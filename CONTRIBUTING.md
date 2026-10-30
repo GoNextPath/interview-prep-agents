@@ -23,7 +23,7 @@ pytest
 
 ## How we work
 
-1. **Pick up an issue** for your area (see [docs/teams.md](docs/teams.md)), or open one describing what you plan to do. Comment `/assign` on the issue so everyone can see it's taken - a bot will assign it to you. Use `/unassign` if you end up not having time, so someone else can pick it up.
+1. **Pick up an issue** for your area (see [docs/teams.md](docs/teams.md)), or open one describing what you plan to do. Comment `/assign` on the issue so everyone can see it's taken - a bot will assign it to you. Use `/unassign` if you end up not having time, so someone else can pick it up. You can also add labels with `/label bug, documentation` (and `/unlabel` to remove them) - the label has to exist already.
 2. **Sync your fork** before you start: `git checkout main && git pull upstream main`.
 3. **Branch** from `main`: `git checkout -b <area>/<short-description>`, e.g. `evaluator/rubric-v1`.
 4. **Keep PRs small** and focused on one thing. Add or update tests.
