@@ -1,0 +1,52 @@
+# Area labels applied automatically to pull requests, based on which files changed.
+# Used by .github/workflows/labeler.yml (actions/labeler v5).
+#
+# Tests and docs for an agent count as that agent's work, so the label follows the
+# area rather than the file type.
+
+"area: question-generator":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/interview_prep/agents/question_generator.py"
+          - "tests/test_question_generator.py"
+
+"area: answer-evaluator":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/interview_prep/agents/answer_evaluator.py"
+          - "tests/test_answer_evaluator.py"
+
+"area: feedback-agent":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/interview_prep/agents/feedback.py"
+          - "tests/test_feedback.py"
+
+"area: metrics-agent":
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/interview_prep/agents/metrics.py"
+          - "tests/test_metrics.py"
+
+# Infra covers the repo scaffolding. models.py and pipeline.py are deliberately
+# NOT here - they're the shared contract between teams, so a change there should
+# get a human deciding which areas it affects rather than a default label.
+"area: infra":
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**"
+          - "docs/**"
+          - "evals/**"
+          - "notebooks/**"
+          - "pyproject.toml"
+          - ".gitignore"
+          - ".env.example"
+          - "README.md"
+          - "CONTRIBUTING.md"
+          - "SECURITY.md"
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/*.md"
+          - "docs/**"
