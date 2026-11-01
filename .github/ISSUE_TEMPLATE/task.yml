@@ -1,0 +1,39 @@
+name: Task
+description: A piece of work for one of the teams
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Which part of the pipeline is this? The matching label gets applied automatically.
+      options:
+        - Question Generator
+        - Answer Evaluator
+        - Feedback Agent
+        - Metrics Agent
+        - Infra
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What needs doing
+    validations:
+      required: true
+
+  - type: textarea
+    id: done-when
+    attributes:
+      label: Done when
+      description: How someone picking this up will know they've finished.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: blocked
+    attributes:
+      label: Blocked?
+      options:
+        - label: This is waiting on an open question in a discussion thread or docs/decisions.md
+          required: false
