@@ -39,7 +39,7 @@ The shared data types the agents pass to each other are in `src/interview_prep/m
 
   Check it worked with `uv --version`. See the [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/) for other options.
 
-You don't need to install Python separately: if `uv sync` can't find Python 3.10 or newer, it downloads one. You only need your own Python 3.10+ if you use the [pip workflow](#pip-workflow) below.
+You don't need to install Python separately: if `uv sync` can't find Python 3.12 or newer, it downloads one. You only need your own Python 3.12+ if you use the [pip workflow](#pip-workflow) below.
 
 ## Quick start
 
@@ -61,7 +61,7 @@ python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 pytest
 ```
-Requires Python 3.10+. No API credentials are needed for tests or the default pipeline.
+Requires Python 3.12+. No API credentials are needed for tests or the default pipeline.
 
 ## Development commands
 
@@ -80,7 +80,23 @@ make test-live         # Real OpenAI calls; may incur charges
 
 The Makefile uses `.venv/bin/python` when available, otherwise `python3`. Override it with
 `make test PYTHON=/path/to/python`. Set application logging with `make trace-ollama IP_LOG_LEVEL=DEBUG`.
-Install `.[dev]` for checks, `.[telemetry]` for tracing, and `.[openai]` for live OpenAI tests.
+Choose an install target after creating the Python 3.12+ virtual environment:
+
+| Command | Installs |
+| --- | --- |
+| `make install` | Development tools for mock/Ollama work |
+| `make install-openai` | Development tools and the OpenAI SDK |
+| `make install-telemetry` | Development tools and tracing support |
+| `make install-all` | All three extras, matching full CI test coverage |
+
+These targets can also add extras to an existing environment; they do not remove previously
+installed extras. For example, run `make install-all`, `make check`, then `make trace-mock`.
+Installing SDKs does not enable model calls or trace export. OpenAI calls require your
+`OPENAI_API_KEY` and live model selection; see [model configuration](docs/llm.md).
+Telemetry defaults to `off`; `console` writes traces to stderr without a collector.
+Only `otlp` enables HTTP trace export to a local or remote collector. The trace Make targets
+select `console`. Tracing stays optional to keep the base dependency set small.
+
 Before using Ollama, start its server and pull/warm the model named in the registry's `local`
 entry; see the [Ollama walkthrough](docs/llm.md#logging-and-an-ollama-trace). Both run targets
 use `WARNING` logging and disable telemetry. Mock runs hide progress chatter; Ollama runs keep

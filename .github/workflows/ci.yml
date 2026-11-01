@@ -13,14 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       LLM_MODE: mock
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.12"]
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10.3.2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.12"
+      # dev contains test/lint tools; provider and tracing SDKs remain optional.
+      # Install both extras so SDK/telemetry tests run instead of being skipped.
+      # Tests use fake transports/exporters and block network access; no keys needed.
       - run: uv sync --locked --extra dev --extra openai --extra telemetry
       - run: uv run --locked ruff check .
       - name: Offline unit and recorded-transport tests
@@ -35,6 +35,7 @@ jobs:
       - uses: astral-sh/setup-uv@v10.3.2
         with:
           python-version: "3.12"
+      # Keep optional SDKs absent to verify the minimal, credential-free install.
       - run: uv sync --locked --extra dev
       - name: Verify credential-free client imports without optional SDKs
         run: >-

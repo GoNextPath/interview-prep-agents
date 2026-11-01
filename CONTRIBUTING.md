@@ -32,8 +32,11 @@ The Makefile uses the project virtual environment when present.
 Tests need no model credentials and block outbound connections, including local model servers.
 For model selection, dependency injection, and optional provider tests, see [model configuration](docs/llm.md).
 Its [code organization map](docs/llm-architecture.md#code-organization) shows where to add providers, configuration
-validators, telemetry, and progress behavior. Install `.[dev,openai,telemetry]` to exercise all
-offline SDK/telemetry tests; `.[dev]` remains sufficient for core development.
+validators, telemetry, and progress behavior. Run `make install-all` to exercise all
+offline SDK/telemetry tests; `make install` remains sufficient for core development.
+Use `make install-openai` or `make install-telemetry` to add just that optional feature.
+Installing the extras does not enable live calls or trace export; see the
+[install and telemetry notes](README.md#development-commands).
 
 ## How we work
 

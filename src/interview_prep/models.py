@@ -7,7 +7,7 @@ before changing a field, since every agent depends on these types.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import Enum
 
 
@@ -63,4 +63,4 @@ class Outcome:
     answer: Answer
     evaluation: Evaluation
     feedback: Feedback
-    recorded_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    recorded_at: datetime = field(default_factory=lambda: datetime.now(UTC))

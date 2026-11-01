@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Self
 
 from interview_prep.agents import AnswerEvaluator, FeedbackAgent, MetricsAgent, QuestionGenerator
 from interview_prep.llm import (
@@ -62,7 +63,7 @@ class Pipeline:
                     logger.warning("LLM client cleanup failed error_type=%s", type(exc).__name__)
             self._closed = True
 
-    def __enter__(self) -> Pipeline:  # noqa: PYI034 - Python 3.10 without typing_extensions dependency
+    def __enter__(self) -> Self:
         return self
 
     def __exit__(self, exc_type, exc, traceback) -> None:

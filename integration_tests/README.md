@@ -7,7 +7,7 @@ relax the offline suite's network blocking.
 Install the optional provider SDK and export your own `OPENAI_API_KEY` securely:
 
 ```sh
-pip install -e ".[dev,openai]"
+make install-openai
 pytest integration_tests --live-models
 ```
 

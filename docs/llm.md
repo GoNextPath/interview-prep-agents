@@ -9,13 +9,22 @@ provider extensions, and UI integration, see [LLM architecture](llm-architecture
 Follow [CONTRIBUTING.md](../CONTRIBUTING.md) to clone and activate a virtual environment:
 
 ```sh
-pip install -e ".[dev]"
+make install
 make run-mock
 ```
 
 The packaged registry and agent assignments select deterministic mocks. No API credentials or
 model SDKs are required. Mock questions and keyword scoring are development fixtures, not real
 answer-quality evaluations. `make help` lists the available commands.
+
+To add optional features to an existing environment, run `make install-openai` for the
+OpenAI SDK, `make install-telemetry` for tracing, or `make install-all` for both and the
+development tools. Existing extras are retained. `make install-all` followed by
+`make check` exercises all offline SDK/telemetry tests; `make trace-mock` then shows
+console traces without credentials or model calls. Installing extras does not enable them:
+OpenAI needs credentials and live model selection, and telemetry defaults to `off`.
+Console tracing writes to stderr; only `otlp` enables HTTP trace export to a collector.
+The SDK and exporter dependencies remain optional to keep the base install small.
 
 ## Registry and precedence
 
@@ -52,7 +61,7 @@ The application does not load `.env` automatically. Never commit `.env`.
 Install the optional SDK and export your own `OPENAI_API_KEY` securely:
 
 ```sh
-pip install -e ".[dev,openai]"
+make install-openai
 export LLM_MODE=live
 export LLM_QUESTION_GENERATOR=openai-fast
 python -m interview_prep --topic databases --answer "I would add an index."
@@ -148,7 +157,7 @@ are independent: ERROR-only logging does not suppress spans.
 Console tracing needs no account or collector:
 
 ```sh
-pip install -e ".[dev,telemetry]"
+make install-telemetry
 ollama serve  # Separate terminal; skip if already running.
 ollama pull llama3.2
 ollama run llama3.2 "Reply with ready."
@@ -190,7 +199,7 @@ neither command removes caches or build artifacts. Logs elsewhere are not delete
 ## Tests and troubleshooting
 
 ```sh
-pip install -e ".[dev,openai,telemetry]"
+make install-all
 make check
 ```
 
