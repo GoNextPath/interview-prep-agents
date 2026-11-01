@@ -2,6 +2,8 @@
 
 An open-source **multi-agent pipeline for interview practice**, built by the Leopard Community.
 
+> **A note for visitors:** this is a study-group project rather than an open community one. The repo is public so members can point to their own work, but we aren't taking contributions from outside the group right now. Thanks for understanding, and for the interest.
+
 Four small agents each do one job and pass their results along:
 
 ```mermaid
