@@ -1,6 +1,6 @@
 # Slash commands so contributors can manage their own issues.
 #
-#   /assign            take an issue
+#   /assign            take an issue (also moves its card to In Progress)
 #   /unassign          release it
 #   /label a, b        add existing labels
 #   /unlabel a, b      remove them
@@ -8,6 +8,10 @@
 # Why this exists: GitHub only lets people with repo access assign or label issues,
 # and our contributors work from forks rather than being org members. This workflow
 # does it on their behalf using the repo token.
+#
+# The project board step needs PROJECTS_TOKEN (a fine-grained PAT with org Projects
+# read+write) because GITHUB_TOKEN is repository-scoped and cannot touch Projects v2.
+# If that secret is missing the board step is skipped and everything else still works.
 
 name: Issue commands
 
@@ -25,21 +29,81 @@ jobs:
       github.event.issue.pull_request == null &&
       startsWith(github.event.comment.body, '/')
     runs-on: ubuntu-latest
+    environment: Development
     steps:
       - name: Run the command
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PROJECTS_TOKEN: ${{ secrets.PROJECTS_TOKEN }}
           REPO: ${{ github.repository }}
           ISSUE: ${{ github.event.issue.number }}
           ACTOR: ${{ github.event.comment.user.login }}
           BODY: ${{ github.event.comment.body }}
+          PROJECT_NUMBER: "1"
+          PROJECT_STATUS: "In Progress"
         run: |
           set -euo pipefail
+
+          OWNER="${REPO%/*}"
+          NAME="${REPO#*/}"
 
           # Only the first line counts, so a command can be followed by prose.
           LINE=$(printf '%s' "$BODY" | head -n 1 | tr -d '\r')
           CMD=$(printf '%s' "$LINE" | awk '{print $1}')
           ARGS=$(printf '%s' "$LINE" | cut -s -d' ' -f2-)
+
+          move_card_to_in_progress() {
+            if [ -z "${PROJECTS_TOKEN:-}" ]; then
+              echo "PROJECTS_TOKEN not set - skipping the board update."
+              return 0
+            fi
+
+            PROJECT=$(GH_TOKEN="$PROJECTS_TOKEN" gh api graphql -f query='
+              query($owner: String!, $number: Int!) {
+                organization(login: $owner) {
+                  projectV2(number: $number) {
+                    id
+                    field(name: "Status") {
+                      ... on ProjectV2SingleSelectField { id options { id name } }
+                    }
+                  }
+                }
+              }' -F owner="$OWNER" -F number="$PROJECT_NUMBER")
+
+            PROJECT_ID=$(printf '%s' "$PROJECT" | jq -r '.data.organization.projectV2.id')
+            FIELD_ID=$(printf '%s' "$PROJECT" | jq -r '.data.organization.projectV2.field.id')
+            OPTION_ID=$(printf '%s' "$PROJECT" | jq -r --arg s "$PROJECT_STATUS" '.data.organization.projectV2.field.options[] | select(.name == $s) | .id')
+
+            if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ] || [ -z "$OPTION_ID" ]; then
+              echo "Could not resolve the project or the '$PROJECT_STATUS' option - skipping."
+              return 0
+            fi
+
+            ITEM_ID=$(GH_TOKEN="$PROJECTS_TOKEN" gh api graphql -f query='
+              query($owner: String!, $name: String!, $number: Int!) {
+                repository(owner: $owner, name: $name) {
+                  issue(number: $number) {
+                    projectItems(first: 20) { nodes { id project { id } } }
+                  }
+                }
+              }' -F owner="$OWNER" -F name="$NAME" -F number="$ISSUE" \
+              --jq ".data.repository.issue.projectItems.nodes[] | select(.project.id == \"$PROJECT_ID\") | .id" | head -n 1)
+
+            if [ -z "$ITEM_ID" ]; then
+              echo "This issue is not on the board - skipping."
+              return 0
+            fi
+
+            GH_TOKEN="$PROJECTS_TOKEN" gh api graphql -f query='
+              mutation($project: ID!, $item: ID!, $field: ID!, $option: String!) {
+                updateProjectV2ItemFieldValue(input: {
+                  projectId: $project, itemId: $item, fieldId: $field,
+                  value: { singleSelectOptionId: $option }
+                }) { projectV2Item { id } }
+              }' -F project="$PROJECT_ID" -F item="$ITEM_ID" -F field="$FIELD_ID" -F option="$OPTION_ID" > /dev/null
+
+            echo "Moved issue #$ISSUE to $PROJECT_STATUS."
+          }
 
           case "$CMD" in
             /assign)
@@ -49,6 +113,8 @@ jobs:
                 exit 0
               fi
               gh issue edit "$ISSUE" --repo "$REPO" --add-assignee "$ACTOR"
+              # A board failure shouldn't make /assign look broken.
+              move_card_to_in_progress || echo "Board update failed - the assignment still went through."
               ;;
 
             /unassign)
@@ -68,12 +134,12 @@ jobs:
               OLD_IFS=$IFS
               IFS=','
               for RAW in $ARGS; do
-                NAME=$(printf '%s' "$RAW" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
-                [ -z "$NAME" ] && continue
-                if grep -Fxq "$NAME" /tmp/labels.txt; then
-                  KNOWN="${KNOWN:+$KNOWN,}$NAME"
+                LABEL=$(printf '%s' "$RAW" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
+                [ -z "$LABEL" ] && continue
+                if grep -Fxq "$LABEL" /tmp/labels.txt; then
+                  KNOWN="${KNOWN:+$KNOWN,}$LABEL"
                 else
-                  UNKNOWN="${UNKNOWN:+$UNKNOWN, }$NAME"
+                  UNKNOWN="${UNKNOWN:+$UNKNOWN, }$LABEL"
                 fi
               done
               IFS=$OLD_IFS
