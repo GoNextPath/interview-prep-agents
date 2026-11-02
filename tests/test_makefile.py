@@ -14,6 +14,7 @@ import pytest
 @pytest.mark.parametrize(
     "target,mode,telemetry,level",
     [
+        ("smoke", "mock", "off", None),
         ("run-mock", "mock", "off", "WARNING"),
         ("run-ollama", "live", "off", "WARNING"),
         ("trace-mock", "mock", "console", "INFO"),
@@ -42,7 +43,7 @@ print(json.dumps({"args": sys.argv[1:], "mode": os.environ["LLM_MODE"],
         f"os.execv({str(fake_python)!r}, [{str(fake_python)!r}, *sys.argv[4:]])\n"
     )
     fake_uv.chmod(0o700)
-    env = dict(os.environ, INTERVIEW_PREP_TELEMETRY="otlp")
+    env = dict(os.environ, LLM_MODE="live", INTERVIEW_PREP_TELEMETRY="otlp")
     # Parent make overrides must not replace the isolated test runner.
     for name in ("MAKEFLAGS", "MFLAGS", "MAKEOVERRIDES", "RUN", "TOOL"):
         env.pop(name, None)
@@ -64,7 +65,11 @@ print(json.dumps({"args": sys.argv[1:], "mode": os.environ["LLM_MODE"],
     payload = json.loads(result.stdout)  # No echoed Make recipe on stdout.
     assert payload["mode"] == mode and payload["telemetry"] == telemetry
     args = payload["args"]
-    assert args[args.index("--log-level") + 1] == level
+    if level is not None:
+        assert args[args.index("--log-level") + 1] == level
+    if target == "smoke":
+        assert args[args.index("--answer") + 1]
+        assert args[args.index("--topic") + 1] == "system design: URL shortener"
     if target == "run-mock":
         assert "--no-progress" in args
     if mode == "live":

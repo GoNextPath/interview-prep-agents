@@ -35,6 +35,15 @@ For model selection, dependency injection, and optional provider tests, see [mod
 Its [code organization map](docs/llm-architecture.md#code-organization) shows where to add providers, configuration
 validators, telemetry, and progress behavior. Run `make install-all` to exercise all
 offline SDK/telemetry tests; `make install` remains sufficient for core development.
+Before submitting changes, run the full offline verification sequence:
+
+```sh
+make install-all
+make check
+make smoke
+```
+
+`make smoke` forces mock clients and disables telemetry, regardless of shell settings.
 Use `make install-openai` or `make install-telemetry` to add just that optional feature.
 Installing the extras does not enable live calls or trace export; see the
 [install and telemetry notes](README.md#development-commands).

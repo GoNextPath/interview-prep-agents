@@ -99,7 +99,9 @@ then `make trace-mock`.
 
 Use `make test TEST_ARGS="tests/test_pipeline.py -q"` for selected tests,
 `make format FILES="src/interview_prep"` for formatting, `make run ARGS="--help"`
-for CLI options, and `make smoke` for a non-interactive example.
+for CLI options, and `make smoke` for a non-interactive example that forces mock clients
+and disables telemetry regardless of shell settings. For full offline verification before
+submitting changes, run `make install-all`, `make check`, and `make smoke`.
 Installing SDKs does not enable model calls or trace export. OpenAI calls require your
 `OPENAI_API_KEY` and live model selection; see [model configuration](docs/llm.md).
 Telemetry defaults to `off`; `console` writes traces to stderr without a collector.

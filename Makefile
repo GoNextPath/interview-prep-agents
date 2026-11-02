@@ -89,7 +89,7 @@ run:
 	$(RUN) interview_prep $(ARGS)
 
 smoke:
-	$(RUN) interview_prep --topic "system design: URL shortener" --difficulty medium \
+	@LLM_MODE=mock INTERVIEW_PREP_TELEMETRY=off $(RUN) interview_prep --topic "system design: URL shortener" --difficulty medium \
 		--answer "The situation is a URL shortener with read-heavy traffic and occasional spikes from popular links. My proposed action is to use a stateless API, random short IDs, and a database with a unique constraint to detect collisions and retry. Redirects would check a cache before reading the database. I would rate limit link creation, allow only HTTP and HTTPS destinations, and monitor latency and errors. The expected result is fast redirects for popular links and durable mappings, with replicas or partitioning added only when measurements justify the complexity."
 
 clean: clean-logs ## Alias for clean-logs (does not remove caches or build artifacts)
