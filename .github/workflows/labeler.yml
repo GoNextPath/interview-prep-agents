@@ -1,0 +1,26 @@
+# Applies area labels to pull requests based on which files changed.
+# The path-to-label map lives in .github/labeler.yml.
+#
+# pull_request_target is used rather than pull_request so this also works for PRs
+# opened from forks, which is how most of our contributions arrive. It runs against
+# the base repo's workflow definition and never checks out or executes PR code, so
+# an untrusted PR cannot run anything here.
+
+name: Label pull requests
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          sync-labels: false

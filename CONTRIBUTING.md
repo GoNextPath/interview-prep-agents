@@ -14,20 +14,25 @@ Then clone your fork and set up the environment:
 git clone https://github.com/<your-username>/interview-prep-agents.git
 cd interview-prep-agents
 git remote add upstream https://github.com/GoNextPath/interview-prep-agents.git
-python -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev]"
-pytest
+uv sync --extra dev
+uv run pytest
 ```
+
+This needs [uv](https://docs.astral.sh/uv/getting-started/installation/). 
+
+If you'd rather use pip, run `python -m venv .venv && source .venv/bin/activate && pip install -e ".[dev]"` instead. 
+
+If you change dependencies in `pyproject.toml`, run `uv lock` and commit the updated `uv.lock`. CI fails if it is out of date.
 
 `origin` is your fork, which is where you push. `upstream` is this repo, which is where pull requests go.
 
 ## How we work
 
-1. **Pick up an issue** for your area (see [docs/teams.md](docs/teams.md)), or open one describing what you plan to do.
+1. **Pick up an issue** for your area (see [docs/teams.md](docs/teams.md)), or open one describing what you plan to do. Comment `/assign` on the issue so everyone can see it's taken - a bot will assign it to you. Use `/unassign` if you end up not having time, so someone else can pick it up. You can also add labels with `/label bug, documentation` (and `/unlabel` to remove them) - the label has to exist already.
 2. **Sync your fork** before you start: `git checkout main && git pull upstream main`.
 3. **Branch** from `main`: `git checkout -b <area>/<short-description>`, e.g. `evaluator/rubric-v1`.
 4. **Keep PRs small** and focused on one thing. Add or update tests.
-5. **Run checks** before pushing: `ruff check . && pytest`.
+5. **Run checks** before pushing: `uv run ruff check . && uv run pytest`.
 6. **Push to your fork**: `git push origin <branch-name>`. Over HTTPS, GitHub asks for a personal access token instead of your password. Create a fine-grained token (GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens) with **Only select repositories** set to your fork and **Contents: Read and write**. With read-only access, the push fails with `403`.
 7. **Open a PR** against `GoNextPath/interview-prep-agents`, fill in the template, and ask someone from your team to review. Changes to `src/interview_prep/models.py` need a reviewer from each affected team.
 
