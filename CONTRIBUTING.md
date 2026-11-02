@@ -33,7 +33,7 @@ If you change dependencies in `pyproject.toml`, run `uv lock` and commit the upd
 3. **Branch** from `main`: `git checkout -b <area>/<short-description>`, e.g. `evaluator/rubric-v1`.
 4. **Keep PRs small** and focused on one thing. Add or update tests.
 5. **Run checks** before pushing: `uv run ruff check . && uv run pytest`.
-6. **Push to your fork**: `git push origin <branch-name>`.
+6. **Push to your fork**: `git push origin <branch-name>`. Over HTTPS, GitHub asks for a personal access token instead of your password. Create a fine-grained token (GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens) with **Only select repositories** set to your fork and **Contents: Read and write**. With read-only access, the push fails with `403`.
 7. **Open a PR** against `GoNextPath/interview-prep-agents`, fill in the template, and ask someone from your team to review. Changes to `src/interview_prep/models.py` need a reviewer from each affected team.
 
 After you push, GitHub usually shows a "Compare & pull request" banner on your fork. That is the quickest way to open the PR.
