@@ -47,24 +47,21 @@ git clone https://github.com/GoNextPath/interview-prep-agents.git
 cd interview-prep-agents
 uv sync --extra dev               # create .venv and install from uv.lock
 
-uv run ruff check . && uv run pytest     # lint and run the tests (do this before every push)
-python -m interview_prep   # run one question through the whole pipeline
+uv run ruff check . && uv run pytest   # lint and run the tests (do this before every push)
+uv run python -m interview_prep         # run one question through the whole pipeline
 ```
 
-Requires Python 3.10+. Check with `python3 --version`. macOS ships with Python 3.9, so on a Mac install a newer one with [Homebrew](https://brew.sh) (`brew install python@3.11`) and create the environment with `python3.11 -m venv .venv` instead.
-
-`python -m interview_prep` asks you to type an answer. To run it without typing, for example in a script, pass one: `python -m interview_prep --answer "your answer"`. Other options are `--topic` and `--difficulty easy|medium|hard`.
+`uv run python -m interview_prep` asks you to type an answer. To run it without typing, for example in a script, pass one: `uv run python -m interview_prep --answer "your answer"`. Other options are `--topic` and `--difficulty easy|medium|hard`.
 
 To contribute, fork the repo and clone your fork instead. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 > **Using Claude Code Desktop?** [`docs/local_setup_ClaudeCodeDesktop.md`](docs/local_setup_ClaudeCodeDesktop.md) shows how to do this setup, run the checks and open a PR from inside the app. The commands themselves live only here.
-uv run pytest                     # run the tests
-uv run python -m interview_prep   # run one question through the whole pipeline
-```
 
 ### pip workflow
 
 Steps if you prefer to use pip.  Note: pip doesn't read uv.lock, so the versions on your local may be different than what is used in CI.
+
+This needs your own Python 3.10 or newer. Check with `python3 --version`. macOS ships with Python 3.9, so on a Mac install a newer one with [Homebrew](https://brew.sh) (`brew install python@3.11`) and create the environment with `python3.11 -m venv .venv` instead.
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
