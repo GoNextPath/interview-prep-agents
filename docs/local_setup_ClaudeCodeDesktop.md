@@ -22,7 +22,7 @@ This doc covers only what's specific to Claude Code Desktop. The setup and run c
 1. Ask Claude to run the checks, for example "run and display the pytest and ruff checks". It runs them in a tab in the **Terminal pane** so you can watch the output.
 2. The tabs stay open with `.venv` active, so you can type more commands there yourself.
 
-   ![Claude Code Desktop with ruff and pytest run in the Terminal pane, showing All checks passed and 6 passed, beside these notes open in the Files pane](local_setup_images/claude_code_desktop_checks_terminal.webp)
+   ![The Terminal pane in Claude Code Desktop after running ruff and pytest, showing All checks passed and 6 passed](local_setup_images/claude_code_desktop_checks_terminal.webp)
 
 ## Creating a PR
 
@@ -32,4 +32,4 @@ This doc covers only what's specific to Claude Code Desktop. The setup and run c
    - Check which base repository the PR targets: your fork, or `GoNextPath` for a PR to the shared project.
    - Fill in the PR template, then click **Create pull request**. The PR is then ready for review, not a draft.
 
-   ![Claude Code Desktop with the finished push in the Terminal pane and GitHub's Comparing changes page for main...docs/local-setup-notes in the Browser pane, showing Able to merge](local_setup_images/claude_code_desktop_create_pr.png)
+   ![The finished push in the Terminal pane above GitHub's Comparing changes page for main...docs/local-setup-notes in the Browser pane, showing Able to merge](local_setup_images/claude_code_desktop_create_pr.png)
