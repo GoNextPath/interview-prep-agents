@@ -6,7 +6,8 @@ provider extensions, and UI integration, see [LLM architecture](llm-architecture
 
 ## Install and run without credentials
 
-Follow [CONTRIBUTING.md](../CONTRIBUTING.md) to clone and activate a virtual environment:
+Follow [CONTRIBUTING.md](../CONTRIBUTING.md) to clone the repository and install uv. Make creates and uses the
+project virtual environment automatically:
 
 ```sh
 make install
@@ -19,7 +20,9 @@ answer-quality evaluations. `make help` lists the available commands.
 
 To add optional features to an existing environment, run `make install-openai` for the
 OpenAI SDK, `make install-telemetry` for tracing, or `make install-all` for both and the
-development tools. Existing extras are retained. `make install-all` followed by
+development tools. Each uv install target synchronizes to the selected extras; use
+`make install-all` to retain both optional features. The pip fallback (`TOOL=pip`) adds
+extras without removing installed ones. `make install-all` followed by
 `make check` exercises all offline SDK/telemetry tests; `make trace-mock` then shows
 console traces without credentials or model calls. Installing extras does not enable them:
 OpenAI needs credentials and live model selection, and telemetry defaults to `off`.

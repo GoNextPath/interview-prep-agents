@@ -10,6 +10,7 @@ from pathlib import Path
 import pytest
 
 
+@pytest.mark.parametrize("tool", ["uv", "pip"])
 @pytest.mark.parametrize(
     "target,mode,telemetry,level",
     [
@@ -19,10 +20,11 @@ import pytest
         ("trace-ollama", "live", "console", "INFO"),
     ],
 )
-def test_make_run_and_trace_modes(tmp_path, target, mode, telemetry, level):
+def test_make_run_and_trace_modes(tmp_path, target, mode, telemetry, level, tool):
     if not shutil.which("make"):
         pytest.skip("Make is optional")
-    fake_python = tmp_path / "python"
+    fake_python = tmp_path / "bin" / "python"
+    fake_python.parent.mkdir()
     fake_python.write_text(
         f"#!{sys.executable}\n"
         + """import json, os, sys
@@ -32,12 +34,27 @@ print(json.dumps({"args": sys.argv[1:], "mode": os.environ["LLM_MODE"],
 """
     )
     fake_python.chmod(0o700)
+    fake_uv = fake_python.with_name("uv")
+    fake_uv.write_text(
+        f"#!{sys.executable}\n"
+        "import os, sys\n"
+        "assert sys.argv[1:4] == ['run', '--locked', 'python']\n"
+        f"os.execv({str(fake_python)!r}, [{str(fake_python)!r}, *sys.argv[4:]])\n"
+    )
+    fake_uv.chmod(0o700)
     env = dict(os.environ, INTERVIEW_PREP_TELEMETRY="otlp")
+    # Parent make overrides must not replace the isolated test runner.
+    for name in ("MAKEFLAGS", "MFLAGS", "MAKEOVERRIDES", "RUN", "TOOL"):
+        env.pop(name, None)
     for name in ("IP_LOG_LEVEL", "IP_TIMEOUT_SECONDS", "IP_PROGRESS_INTERVAL"):
         env.pop(name, None)
     env.update(LOG_LEVEL="info", TIMEOUT_SECONDS="invalid", PROGRESS_INTERVAL="invalid")
+    env["PATH"] = str(fake_python.parent) + os.pathsep + env.get("PATH", "")
+    command = ["make", "--no-print-directory", target]
+    if tool == "pip":
+        command.extend(["TOOL=pip", f"VENV={tmp_path}"])
     result = subprocess.run(
-        ["make", "--no-print-directory", target, f"PYTHON={fake_python}"],
+        command,
         env=env,
         capture_output=True,
         text=True,

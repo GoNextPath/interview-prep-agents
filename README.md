@@ -46,10 +46,10 @@ You don't need to install Python separately: if `uv sync` can't find Python 3.12
 ```bash
 git clone https://github.com/GoNextPath/interview-prep-agents.git
 cd interview-prep-agents
-uv sync --extra dev               # create .venv and install from uv.lock
+uv sync --locked --extra dev               # create .venv and install from uv.lock
 
-uv run pytest                     # run the tests
-uv run python -m interview_prep   # run one question through the whole pipeline
+uv run --locked pytest                     # run the tests
+uv run --locked python -m interview_prep   # run one question through the whole pipeline
 ```
 
 ### pip workflow
@@ -61,6 +61,7 @@ python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 pytest
 ```
+
 Requires Python 3.12+. No API credentials are needed for tests or the default pipeline.
 
 ## Development commands
@@ -78,9 +79,11 @@ make test-live-list    # Inspect live tests without model calls
 make test-live         # Real OpenAI calls; may incur charges
 ```
 
-The Makefile uses `.venv/bin/python` when available, otherwise `python3`. Override it with
-`make test PYTHON=/path/to/python`. Set application logging with `make trace-ollama IP_LOG_LEVEL=DEBUG`.
-Choose an install target after creating the Python 3.12+ virtual environment:
+The Makefile defaults to locked `uv` commands, matching CI. Run `make install` to create
+the Python 3.12+ environment. For pip, use `make install TOOL=pip PYTHON=python3.12`;
+subsequent commands also need `TOOL=pip` and use `VENV=.venv` without activation.
+Set application logging with `make trace-ollama IP_LOG_LEVEL=DEBUG`.
+Choose an install target:
 
 | Command | Installs |
 | --- | --- |
@@ -89,8 +92,14 @@ Choose an install target after creating the Python 3.12+ virtual environment:
 | `make install-telemetry` | Development tools and tracing support |
 | `make install-all` | All three extras, matching full CI test coverage |
 
-These targets can also add extras to an existing environment; they do not remove previously
-installed extras. For example, run `make install-all`, `make check`, then `make trace-mock`.
+With uv, each install target synchronizes the environment to its selected extras; use
+`make install-all` to keep both optional features installed. Pip installs add extras without
+removing previously installed ones. For example, run `make install-all`, `make check`,
+then `make trace-mock`.
+
+Use `make test TEST_ARGS="tests/test_pipeline.py -q"` for selected tests,
+`make format FILES="src/interview_prep"` for formatting, `make run ARGS="--help"`
+for CLI options, and `make smoke` for a non-interactive example.
 Installing SDKs does not enable model calls or trace export. OpenAI calls require your
 `OPENAI_API_KEY` and live model selection; see [model configuration](docs/llm.md).
 Telemetry defaults to `off`; `console` writes traces to stderr without a collector.

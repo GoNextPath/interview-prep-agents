@@ -14,8 +14,8 @@ Then clone your fork and set up the environment:
 git clone https://github.com/<your-username>/interview-prep-agents.git
 cd interview-prep-agents
 git remote add upstream https://github.com/GoNextPath/interview-prep-agents.git
-uv sync --extra dev
-uv run pytest
+uv sync --locked --extra dev
+uv run --locked pytest
 ```
 
 This needs [uv](https://docs.astral.sh/uv/getting-started/installation/). 
@@ -27,7 +27,8 @@ If you change dependencies in `pyproject.toml`, run `uv lock` and commit the upd
 `origin` is your fork, which is where you push. `upstream` is this repo, which is where pull requests go.
 
 Use `make help` to discover development commands, or `make check` to run Ruff and offline tests.
-The Makefile uses the project virtual environment when present.
+The Makefile defaults to locked uv commands. For the pip workflow, pass `TOOL=pip`;
+`VENV=.venv` selects the environment and `PYTHON` selects the interpreter used to create it.
 
 Tests need no model credentials and block outbound connections, including local model servers.
 For model selection, dependency injection, and optional provider tests, see [model configuration](docs/llm.md).
@@ -44,7 +45,7 @@ Installing the extras does not enable live calls or trace export; see the
 2. **Sync your fork** before you start: `git checkout main && git pull upstream main`.
 3. **Branch** from `main`: `git checkout -b <area>/<short-description>`, e.g. `evaluator/rubric-v1`.
 4. **Keep PRs small** and focused on one thing. Add or update tests.
-5. **Run checks** before pushing: `uv run ruff check . && uv run pytest`.
+5. **Run checks** before pushing: `uv run --locked ruff check . && uv run --locked pytest`.
 6. **Push to your fork**: `git push origin <branch-name>`.
 7. **Open a PR** against `GoNextPath/interview-prep-agents`, fill in the template, and ask someone from your team to review. Changes to `src/interview_prep/models.py` need a reviewer from each affected team.
 

@@ -8,7 +8,7 @@ Install the optional provider SDK and export your own `OPENAI_API_KEY` securely:
 
 ```sh
 make install-openai
-pytest integration_tests --live-models
+make test-live
 ```
 
 Both the directory and opt-in flag are intentional. Without the flag, live tests are deselected
@@ -20,7 +20,7 @@ regardless of shell model selectors.
 To inspect the suite without any model calls:
 
 ```sh
-pytest integration_tests --collect-only
+make test-live-list
 ```
 
 Collection remains network-blocked and credential-free even with `--live-models`. Original
@@ -31,7 +31,7 @@ tests protected. Collection-only never lifts the guard.
 Normal development and CI checks remain offline:
 
 ```sh
-pytest
+make check
 ```
 
 Local Ollama tracing is a separate manual walkthrough in [model configuration](../docs/llm.md#logging-and-an-ollama-trace).
