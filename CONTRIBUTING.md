@@ -14,13 +14,18 @@ Then clone your fork and set up the environment:
 git clone https://github.com/<your-username>/interview-prep-agents.git
 cd interview-prep-agents
 git remote add upstream https://github.com/GoNextPath/interview-prep-agents.git
-uv sync --extra dev
-uv run pytest
+make install
+make check
 ```
 
-This needs [uv](https://docs.astral.sh/uv/getting-started/installation/). 
+This needs Make and [uv](https://docs.astral.sh/uv/getting-started/installation/).
 
-If you'd rather use pip, run `python -m venv .venv && source .venv/bin/activate && pip install -e ".[dev]"` instead. 
+For pip, use `make install TOOL=pip` and `make check TOOL=pip` instead. See the
+[README](README.md#pip-workflow) for environment options and commands without Make.
+
+Run `make smoke` to verify all four local agents work together. No API key or
+`.env` setup is required for the current scaffold. See the
+[quick start](README.md#quick-start) for expected output and feedback-loop checks.
 
 If you change dependencies in `pyproject.toml`, run `uv lock` and commit the updated `uv.lock`. CI fails if it is out of date.
 
@@ -32,7 +37,7 @@ If you change dependencies in `pyproject.toml`, run `uv lock` and commit the upd
 2. **Sync your fork** before you start: `git checkout main && git pull upstream main`.
 3. **Branch** from `main`: `git checkout -b <area>/<short-description>`, e.g. `evaluator/rubric-v1`.
 4. **Keep PRs small** and focused on one thing. Add or update tests.
-5. **Run checks** before pushing: `uv run ruff check . && uv run pytest`.
+5. **Run checks** before pushing: `make check` (or `make check TOOL=pip`).
 6. **Push to your fork**: `git push origin <branch-name>`. Over HTTPS, GitHub asks for a personal access token instead of your password. Create a fine-grained token (GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens) with **Only select repositories** set to your fork and **Contents: Read and write**. With read-only access, the push fails with `403`.
 7. **Open a PR** against `GoNextPath/interview-prep-agents`, fill in the template, and ask someone from your team to review. Changes to `src/interview_prep/models.py` need a reviewer from each affected team.
 
@@ -50,10 +55,10 @@ Worth doing before each new branch so you are not building against stale code.
 
 ## Ground rules
 
-- **Never commit secrets.** API keys go in `.env`, which git ignores. Copy `.env.example` to get started.
+- **Never commit secrets.** If a future provider integration requires API keys, keep them in ignored `.env` files or CI secrets. `.env.example` contains placeholders; it is not needed for today's local stubs.
 - **Treat model output and user answers as untrusted.** See [SECURITY.md](SECURITY.md).
 - **Keep docs readable.** If your change affects how someone runs or uses the project, update the README.
-- **Watch costs.** Use small or cheap models while developing, and mock LLM calls in tests.
+- **Keep tests offline.** Unit tests must not require API keys, call external services, or incur model costs. Mock provider calls when a provider is introduced; live integration tests need a separate, explicitly enabled workflow.
 
 ## AI-assisted contributions
 

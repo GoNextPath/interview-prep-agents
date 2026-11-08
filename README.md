@@ -45,28 +45,60 @@ You don't need to install Python separately: if `uv sync` can't find Python 3.10
 ```bash
 git clone https://github.com/GoNextPath/interview-prep-agents.git
 cd interview-prep-agents
-uv sync --extra dev               # create .venv and install from uv.lock
-
-uv run ruff check . && uv run pytest   # lint and run the tests (do this before every push)
-uv run python -m interview_prep         # run one question through the whole pipeline
+make install                     # create .venv and install from uv.lock
+make check                       # run Ruff and pytest
+make run                         # run one question through the whole pipeline
+make smoke                       # non-interactive CLI example
 ```
 
-`uv run python -m interview_prep` asks you to type an answer. To run it without typing, for example in a script, pass one: `uv run python -m interview_prep --answer "your answer"`. Other options are `--topic` and `--difficulty easy|medium|hard`.
+No API key, `.env` file, provider account, or external service is needed for the
+current scaffold. All four agents use local stubs, and outcomes are stored in
+memory for the lifetime of the pipeline instance.
 
-To contribute, fork the repo and clone your fork instead. See [CONTRIBUTING.md](CONTRIBUTING.md).
+`make smoke` runs question generation, answer evaluation, feedback, and outcome
+recording with a synthetic URL-shortener design answer framed as situation,
+action, and result. Expect a stub question and a score of 100% from keyword
+matching; the score does not assess design quality. To also verify the
+metrics-to-generator feedback loop, run
+`make test TEST_ARGS="tests/test_pipeline.py -q"`. The CLI runs one round; it does
+not invoke that feedback step or persist results between runs.
+
+These commands require Make (on Windows, use WSL or a compatible Make installation).
+Without Make, use `uv sync --locked --extra dev`, `uv run --locked ruff check .`,
+`uv run --locked pytest`, and `uv run --locked python -m interview_prep`.
+
+Run `make help` for all targets. Select tests with
+`make test TEST_ARGS="tests/test_pipeline.py -q"`, format `src` and `tests` with
+`make format` (or specific files with `make format FILES="path/to/file.py"`), and pass CLI options with
+`make run ARGS="--topic teamwork --difficulty medium"`.
 
 > **Using Claude Code Desktop?** [`docs/local_setup_ClaudeCodeDesktop.md`](docs/local_setup_ClaudeCodeDesktop.md) shows how to do this setup, run the checks and open a PR from inside the app. The commands themselves live only here.
 
 ### pip workflow
 
-Steps if you prefer to use pip.  Note: pip doesn't read uv.lock, so the versions on your local may be different than what is used in CI.
+Pip requires Python 3.10+ and does not read `uv.lock`, so installed versions may
+differ from CI. On macOS/Linux or WSL, the same Make targets support pip:
+
+```bash
+make install TOOL=pip             # create .venv and install with pip
+make check TOOL=pip
+make run TOOL=pip
+```
+
+No activation is needed. Override `PYTHON=python3.10` during installation to choose
+an interpreter, or `VENV=path/to/venv` on every command to use a different environment.
+
+Without Make, create and activate an environment, then run the tools directly:
 
 This needs your own Python 3.10 or newer. Check with `python3 --version`. macOS ships with Python 3.9, so on a Mac install a newer one with [Homebrew](https://brew.sh) (`brew install python@3.11`) and create the environment with `python3.11 -m venv .venv` instead.
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev]"
-pytest
+python -m venv .venv
+source .venv/bin/activate         # Windows PowerShell: .venv\Scripts\Activate.ps1
+python -m pip install -e ".[dev]"
+python -m ruff check .
+python -m pytest
+python -m interview_prep
 ```
 
 ## Repo layout

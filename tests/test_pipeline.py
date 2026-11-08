@@ -5,7 +5,9 @@ from interview_prep.pipeline import Pipeline
 def test_full_round_runs():
     p = Pipeline()
     q = p.ask("teamwork", Difficulty.EASY)
-    outcome = p.submit(q, "The situation was tense; my action was to listen; the result was a shipped feature.")
+    outcome = p.submit(
+        q, "The situation was tense; my action was to listen; the result was a shipped feature."
+    )
     assert 0.0 <= outcome.evaluation.overall_score <= 1.0
     assert outcome.feedback.summary
     assert len(p.metrics.outcomes) == 1

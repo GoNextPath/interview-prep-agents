@@ -1,6 +1,6 @@
 """Minimal CLI: run one question through the whole pipeline.
 
-    python -m interview_prep --topic "system design" --difficulty medium
+python -m interview_prep --topic "system design" --difficulty medium
 """
 
 from __future__ import annotations
