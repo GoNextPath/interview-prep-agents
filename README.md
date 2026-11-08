@@ -72,6 +72,8 @@ Run `make help` for all targets. Select tests with
 `make format` (or specific files with `make format FILES="path/to/file.py"`), and pass CLI options with
 `make run ARGS="--topic teamwork --difficulty medium"`.
 
+> **Using Claude Code Desktop?** [`docs/local_setup_ClaudeCodeDesktop.md`](docs/local_setup_ClaudeCodeDesktop.md) shows how to do this setup, run the checks and open a PR from inside the app. The commands themselves live only here.
+
 ### pip workflow
 
 Pip requires Python 3.10+ and does not read `uv.lock`, so installed versions may
@@ -87,6 +89,8 @@ No activation is needed. Override `PYTHON=python3.10` during installation to cho
 an interpreter, or `VENV=path/to/venv` on every command to use a different environment.
 
 Without Make, create and activate an environment, then run the tools directly:
+
+This needs your own Python 3.10 or newer. Check with `python3 --version`. macOS ships with Python 3.9, so on a Mac install a newer one with [Homebrew](https://brew.sh) (`brew install python@3.11`) and create the environment with `python3.11 -m venv .venv` instead.
 
 ```bash
 python -m venv .venv
