@@ -28,10 +28,9 @@ miss, which is why this is written down.
 6. Open a PR. The labeler applies the area label from the paths you touched.
 
 ## Checks
-
-- `uv run ruff check . && uv run pytest` passes
+- `make check` passes (lint and tests)
 - The new agent has a test that fails if you delete its core logic
-- `uv run python -m interview_prep` still runs end to end
+- `make run` still works end to end
 
 ## Gotchas
 

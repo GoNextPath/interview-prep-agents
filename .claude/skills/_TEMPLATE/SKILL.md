@@ -21,7 +21,7 @@ to be worth writing down.>
 
 ## Checks
 
-- `uv run ruff check . && uv run pytest` passes
+- `make check` passes (lint and tests)
 - <Anything specific to this change - a new test, a fixture, a schema that has to stay valid.>
 
 ## Gotchas
