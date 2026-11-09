@@ -1,0 +1,60 @@
+{
+  "questions": [
+    {
+      "id": "q-background-yourself",
+      "topic": "background",
+      "difficulty": "easy",
+      "prompt": "Tell me about yourself.",
+      "expected_points": ["current role and scope", "relevant prior experience", "connection to this role"]
+    },
+    {
+      "id": "q-motivation-why-role",
+      "topic": "motivation",
+      "difficulty": "easy",
+      "prompt": "Why did you apply for this job?",
+      "expected_points": ["what the team builds", "related experience", "how your skills match the work"]
+    },
+    {
+      "id": "q-motivation-why-now",
+      "topic": "motivation",
+      "difficulty": "medium",
+      "prompt": "Why now?",
+      "expected_points": ["why this is the right time", "the problem you want next", "link to recent work"]
+    },
+    {
+      "id": "q-background-current-role",
+      "topic": "background",
+      "difficulty": "easy",
+      "prompt": "What is your current position?",
+      "expected_points": ["what you own", "scale or quality bar", "work with other teams"]
+    },
+    {
+      "id": "q-motivation-next-step",
+      "topic": "motivation",
+      "difficulty": "medium",
+      "prompt": "What is your ideal next step?",
+      "expected_points": ["kind of team", "technical contribution", "how you want to work with others"]
+    },
+    {
+      "id": "q-teamwork-cross-functional",
+      "topic": "teamwork",
+      "difficulty": "medium",
+      "prompt": "Tell me about a time you worked with cross-functional partners to ship a backend platform.",
+      "expected_points": ["situation", "task", "action", "result"]
+    },
+    {
+      "id": "q-ownership-reusable-systems",
+      "topic": "ownership",
+      "difficulty": "medium",
+      "prompt": "Tell me about a time you built a reusable backend component or made a system scale.",
+      "expected_points": ["situation", "task", "action", "result"]
+    },
+    {
+      "id": "q-mentoring-incidents",
+      "topic": "mentoring",
+      "difficulty": "medium",
+      "prompt": "Tell me about a time you raised code quality or incident response while supporting other engineers.",
+      "expected_points": ["situation", "task", "action", "result"]
+    }
+  ]
+}

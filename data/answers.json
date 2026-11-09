@@ -1,0 +1,218 @@
+{
+  "answers": [
+    {
+      "id": "a-background-yourself-strong",
+      "question_id": "q-background-yourself",
+      "text": "I am a backend engineer on a consumer product used by about a million people a day. I design APIs and services that stay fast under load. Before that I worked on notification and payments services, where I raised throughput and cut repeat incidents. I want a role that needs the same reliable, high-traffic backend work, plus close partnership with product and trust teams.",
+      "label": {
+        "overall_score": 1.0,
+        "criteria": [
+          {"criterion": "current role and scope", "score": 1.0, "rationale": "Names the current backend role and the traffic it serves."},
+          {"criterion": "relevant prior experience", "score": 1.0, "rationale": "Describes earlier notification and payments work and the outcome."},
+          {"criterion": "connection to this role", "score": 1.0, "rationale": "Ties that experience to high-traffic systems and partner teams."}
+        ]
+      }
+    },
+    {
+      "id": "a-background-yourself-weak",
+      "question_id": "q-background-yourself",
+      "text": "I write backend code and I am looking for a new job.",
+      "label": {
+        "overall_score": 0.33,
+        "criteria": [
+          {"criterion": "current role and scope", "score": 1.0, "rationale": "States a backend role, with no scope."},
+          {"criterion": "relevant prior experience", "score": 0.0, "rationale": "No earlier work."},
+          {"criterion": "connection to this role", "score": 0.0, "rationale": "No link to the team or the work."}
+        ]
+      }
+    },
+    {
+      "id": "a-motivation-why-role-strong",
+      "question_id": "q-motivation-why-role",
+      "text": "This team builds the social layer that connects guests and hosts. I have shipped trust and community features, including moderation tools and content APIs. The job needs scalable backend systems and work across product and data, which is how I already design APIs with those partners.",
+      "label": {
+        "overall_score": 1.0,
+        "criteria": [
+          {"criterion": "what the team builds", "score": 1.0, "rationale": "Names the social layer between guests and hosts."},
+          {"criterion": "related experience", "score": 1.0, "rationale": "Cites trust, moderation, and content APIs."},
+          {"criterion": "how your skills match the work", "score": 1.0, "rationale": "Matches scale and cross-team API work to the role."}
+        ]
+      }
+    },
+    {
+      "id": "a-motivation-why-role-weak",
+      "question_id": "q-motivation-why-role",
+      "text": "Airbnb seems like a well-known company and I would like to work there.",
+      "label": {
+        "overall_score": 0.0,
+        "criteria": [
+          {"criterion": "what the team builds", "score": 0.0, "rationale": "No product or team."},
+          {"criterion": "related experience", "score": 0.0, "rationale": "No experience."},
+          {"criterion": "how your skills match the work", "score": 0.0, "rationale": "No skill match."}
+        ]
+      }
+    },
+    {
+      "id": "a-motivation-why-now-strong",
+      "question_id": "q-motivation-why-now",
+      "text": "This is the right time because I want to take high-traffic backend work into a product built around real-world community. The next problem I want is profile and social-graph features. That follows recent work on a help center and moderation tools used by people in many countries.",
+      "label": {
+        "overall_score": 1.0,
+        "criteria": [
+          {"criterion": "why this is the right time", "score": 1.0, "rationale": "Gives a reason to move now."},
+          {"criterion": "the problem you want next", "score": 1.0, "rationale": "Names profile and social-graph features."},
+          {"criterion": "link to recent work", "score": 1.0, "rationale": "Connects that goal to help-center and moderation work."}
+        ]
+      }
+    },
+    {
+      "id": "a-motivation-why-now-weak",
+      "question_id": "q-motivation-why-now",
+      "text": "I have been in my job for a while and I am ready for a change.",
+      "label": {
+        "overall_score": 0.33,
+        "criteria": [
+          {"criterion": "why this is the right time", "score": 1.0, "rationale": "Says they are ready to move, without a specific reason."},
+          {"criterion": "the problem you want next", "score": 0.0, "rationale": "No next problem."},
+          {"criterion": "link to recent work", "score": 0.0, "rationale": "No recent work."}
+        ]
+      }
+    },
+    {
+      "id": "a-background-current-role-strong",
+      "question_id": "q-background-current-role",
+      "text": "I own backend features that span client and server behavior for a product with about a million daily users, with a latency budget around 200 milliseconds. I also partner with trust and safety on moderation tools that cut missed cases sharply, and I mentor newer engineers on review standards.",
+      "label": {
+        "overall_score": 1.0,
+        "criteria": [
+          {"criterion": "what you own", "score": 1.0, "rationale": "Owns client and server backend features."},
+          {"criterion": "scale or quality bar", "score": 1.0, "rationale": "Gives users and a latency budget."},
+          {"criterion": "work with other teams", "score": 1.0, "rationale": "Partners with trust and safety and mentors engineers."}
+        ]
+      }
+    },
+    {
+      "id": "a-background-current-role-weak",
+      "question_id": "q-background-current-role",
+      "text": "I am a software engineer on the backend team.",
+      "label": {
+        "overall_score": 0.33,
+        "criteria": [
+          {"criterion": "what you own", "score": 1.0, "rationale": "Names a backend engineering role only."},
+          {"criterion": "scale or quality bar", "score": 0.0, "rationale": "No scale or quality bar."},
+          {"criterion": "work with other teams", "score": 0.0, "rationale": "No partners or mentoring."}
+        ]
+      }
+    },
+    {
+      "id": "a-motivation-next-step-strong",
+      "question_id": "q-motivation-next-step",
+      "text": "I want a profile and community team that builds the systems connecting people. I would contribute scalable service design that stays reliable when the product changes. I also want to keep mentoring and to ship with product and data partners.",
+      "label": {
+        "overall_score": 1.0,
+        "criteria": [
+          {"criterion": "kind of team", "score": 1.0, "rationale": "Names a profile and community team."},
+          {"criterion": "technical contribution", "score": 1.0, "rationale": "Offers scalable, reliable service design."},
+          {"criterion": "how you want to work with others", "score": 1.0, "rationale": "Includes mentoring and product and data partners."}
+        ]
+      }
+    },
+    {
+      "id": "a-motivation-next-step-weak",
+      "question_id": "q-motivation-next-step",
+      "text": "I want a senior title and a higher salary.",
+      "label": {
+        "overall_score": 0.0,
+        "criteria": [
+          {"criterion": "kind of team", "score": 0.0, "rationale": "No team."},
+          {"criterion": "technical contribution", "score": 0.0, "rationale": "No technical work."},
+          {"criterion": "how you want to work with others", "score": 0.0, "rationale": "No collaboration."}
+        ]
+      }
+    },
+    {
+      "id": "a-teamwork-cross-functional-strong",
+      "question_id": "q-teamwork-cross-functional",
+      "text": "Situation: our help-center content platform served more than a million people a day in over 50 locales, and launches were stalling between product, ops, and backend. Task: I needed a design that could grow, survive a region failure, and stay fast. Action: I led the design with a document store, a GraphQL API, and cross-region caching, and I worked with ops on the rollout plan. Result: the service held about 200 millisecond latency and stayed available across regions.",
+      "label": {
+        "overall_score": 1.0,
+        "criteria": [
+          {"criterion": "situation", "score": 1.0, "rationale": "Sets the product, scale, and the cross-team stall."},
+          {"criterion": "task", "score": 1.0, "rationale": "States scale, fault tolerance, and latency as the job."},
+          {"criterion": "action", "score": 1.0, "rationale": "Describes the design and the ops partnership."},
+          {"criterion": "result", "score": 1.0, "rationale": "Gives latency and availability."}
+        ]
+      }
+    },
+    {
+      "id": "a-teamwork-cross-functional-weak",
+      "question_id": "q-teamwork-cross-functional",
+      "text": "We had a platform and I talked to some other teams. It shipped.",
+      "label": {
+        "overall_score": 0.25,
+        "criteria": [
+          {"criterion": "situation", "score": 0.5, "rationale": "Names a platform and nothing about the constraint."},
+          {"criterion": "task", "score": 0.0, "rationale": "No task."},
+          {"criterion": "action", "score": 0.5, "rationale": "Mentions talking to other teams, with no specific action."},
+          {"criterion": "result", "score": 0.0, "rationale": "Says it shipped, with no outcome."}
+        ]
+      }
+    },
+    {
+      "id": "a-ownership-reusable-systems-strong",
+      "question_id": "q-ownership-reusable-systems",
+      "text": "Situation: I owned creator monetization and notification services used by hundreds of clients and more than a thousand campaigns. Task: the services had to stay stable as query volume grew. Action: I changed the storage keys to use partitioning and composite keys so hot ranges split cleanly. Result: throughput rose by about 40 percent, from 16 thousand to 22.5 thousand queries a day.",
+      "label": {
+        "overall_score": 1.0,
+        "criteria": [
+          {"criterion": "situation", "score": 1.0, "rationale": "Names the services and who depended on them."},
+          {"criterion": "task", "score": 1.0, "rationale": "States the stability and volume goal."},
+          {"criterion": "action", "score": 1.0, "rationale": "Describes the key and partition change."},
+          {"criterion": "result", "score": 1.0, "rationale": "Gives the throughput change."}
+        ]
+      }
+    },
+    {
+      "id": "a-ownership-reusable-systems-weak",
+      "question_id": "q-ownership-reusable-systems",
+      "text": "I made some database queries faster.",
+      "label": {
+        "overall_score": 0.25,
+        "criteria": [
+          {"criterion": "situation", "score": 0.0, "rationale": "No context."},
+          {"criterion": "task", "score": 0.0, "rationale": "No goal."},
+          {"criterion": "action", "score": 0.5, "rationale": "Mentions faster queries, with no method."},
+          {"criterion": "result", "score": 0.5, "rationale": "Implies an improvement, with no measure."}
+        ]
+      }
+    },
+    {
+      "id": "a-mentoring-incidents-strong",
+      "question_id": "q-mentoring-incidents",
+      "text": "Situation: the same priority-zero incidents kept coming back and pulling the team off planned work. Task: I needed fewer incidents and clearer standards for newer engineers. Action: I traced the failures across team boundaries, set an error-handling standard, and coached two junior engineers on a three-month plan. Result: those repeat incidents stopped, and their reviews started catching the same class of bug before merge.",
+      "label": {
+        "overall_score": 1.0,
+        "criteria": [
+          {"criterion": "situation", "score": 1.0, "rationale": "Names repeat incidents and the productivity cost."},
+          {"criterion": "task", "score": 1.0, "rationale": "States fewer incidents and support for junior engineers."},
+          {"criterion": "action", "score": 1.0, "rationale": "Covers debugging, a standard, and a coaching plan."},
+          {"criterion": "result", "score": 1.0, "rationale": "Incidents stopped and review quality improved."}
+        ]
+      }
+    },
+    {
+      "id": "a-mentoring-incidents-weak",
+      "question_id": "q-mentoring-incidents",
+      "text": "I help junior people when they ask, and production is mostly fine.",
+      "label": {
+        "overall_score": 0.25,
+        "criteria": [
+          {"criterion": "situation", "score": 0.5, "rationale": "Hints that production is the setting, with no incident."},
+          {"criterion": "task", "score": 0.0, "rationale": "No task."},
+          {"criterion": "action", "score": 0.5, "rationale": "Helping when asked is partial mentoring."},
+          {"criterion": "result", "score": 0.0, "rationale": "No change in quality or incidents."}
+        ]
+      }
+    }
+  ]
+}
