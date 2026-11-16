@@ -12,13 +12,31 @@ requires-python = ">=3.10"
 dependencies = []
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "ruff>=0.5"]
+dev = [
+    "coverage>=7.0",
+    "pytest>=8",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.5",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["interview_prep"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+precision = 2
+# Deliberately low floor: catches coverage collapsing (tests not running or not collected),
+# not a quality gate. Most agents are still stubs; raise it once real implementations land.
+fail_under = 10
+# Keep in sync with the comment on the matching block in src/interview_prep/__main__.py.
+exclude_also = ['if __name__ == .__main__.:']
 
 [tool.ruff]
 line-length = 110

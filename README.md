@@ -46,7 +46,7 @@ You don't need to install Python separately: if `uv sync` can't find Python 3.10
 git clone https://github.com/GoNextPath/interview-prep-agents.git
 cd interview-prep-agents
 make install                     # create .venv and install from uv.lock
-make check                       # run Ruff and pytest
+make check                       # run Ruff and pytest with coverage, as CI does
 make run                         # run one question through the whole pipeline
 make smoke                       # non-interactive CLI example
 ```
@@ -65,12 +65,18 @@ not invoke that feedback step or persist results between runs.
 
 These commands require Make (on Windows, use WSL or a compatible Make installation).
 Without Make, use `uv sync --locked --extra dev`, `uv run --locked ruff check .`,
-`uv run --locked pytest`, and `uv run --locked python -m interview_prep`.
+`uv run --locked pytest` (add `--cov` for coverage), and `uv run --locked python -m interview_prep`.
 
 Run `make help` for all targets. Select tests with
 `make test TEST_ARGS="tests/test_pipeline.py -q"`, format `src` and `tests` with
 `make format` (or specific files with `make format FILES="path/to/file.py"`), and pass CLI options with
 `make run ARGS="--topic teamwork --difficulty medium"`.
+
+`make test-verbose` lists each test as it runs. `make coverage` adds a coverage report with
+uncovered line numbers. CI runs tests with coverage on every pull request, fails if total
+coverage drops below 10%, and posts the coverage table on the run's summary page. `make check` runs
+the same lint and coverage checks, so it fails locally whenever CI would. The threshold
+(`fail_under`), exclusions, and other settings are under `[tool.coverage.*]` in `pyproject.toml`.
 
 > **Using Claude Code Desktop?** [`docs/local_setup_ClaudeCodeDesktop.md`](docs/local_setup_ClaudeCodeDesktop.md) shows how to do this setup, run the checks and open a PR from inside the app. The commands themselves live only here.
 

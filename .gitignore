@@ -10,3 +10,6 @@ venv/
 .ruff_cache/
 .ipynb_checkpoints/
 .DS_Store
+.coverage
+.coverage.*
+htmlcov/

@@ -32,5 +32,7 @@ def main() -> None:
         print(f"  - {i}")
 
 
+# Excluded from coverage by `exclude_also` under [tool.coverage.report] in pyproject.toml.
+# Reason: runs only when started as a program, not when imported (as the tests do).
 if __name__ == "__main__":
     main()
