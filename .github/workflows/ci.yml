@@ -21,4 +21,14 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: uv sync --locked --extra dev
       - run: uv run ruff check .
-      - run: uv run pytest
+      # Mirrors `make check`; the coverage threshold comes from pyproject.toml.
+      - run: uv run pytest --cov
+      - name: Coverage summary
+        if: always()
+        run: |
+          if [ -f .coverage ]; then
+            echo "### Coverage (Python ${{ matrix.python-version }})" >> "$GITHUB_STEP_SUMMARY"
+            uv run coverage report --format=markdown --fail-under=0 >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No coverage data was collected." >> "$GITHUB_STEP_SUMMARY"
+          fi

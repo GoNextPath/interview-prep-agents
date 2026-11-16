@@ -13,14 +13,16 @@ else
 $(error TOOL must be uv or pip)
 endif
 
-.PHONY: help install lint test check format run smoke
+.PHONY: help install lint test test-verbose coverage check format run smoke
 
 help:
 	@echo 'Commands (default: TOOL=uv; use TOOL=pip for pip):'
 	@echo '  make install              Install project and development tools'
 	@echo '  make lint                 Run Ruff checks'
 	@echo '  make test                 Run pytest (TEST_ARGS="..." for selection)'
-	@echo '  make check                Run lint and tests'
+	@echo '  make test-verbose         Run pytest with per-test output (accepts TEST_ARGS)'
+	@echo '  make coverage             Run pytest with a coverage report (accepts TEST_ARGS)'
+	@echo '  make check                Run lint and tests with coverage (as CI does)'
 	@echo '  make format               Format src and tests (FILES="..." to override)'
 	@echo '  make run                  Run the CLI (ARGS="..." for CLI options)'
 	@echo '  make smoke                Run a non-interactive CLI example'
@@ -41,7 +43,13 @@ lint:
 test:
 	$(RUN) pytest $(TEST_ARGS)
 
-check: lint test
+test-verbose:
+	$(RUN) pytest -v $(TEST_ARGS)
+
+coverage:
+	$(RUN) pytest --cov --cov-report=term-missing $(TEST_ARGS)
+
+check: lint coverage
 
 format:
 	@test -n "$(strip $(FILES))" || (echo 'Specify files: make format FILES="path/to/file.py"'; exit 1)

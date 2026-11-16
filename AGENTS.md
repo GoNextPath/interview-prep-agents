@@ -46,8 +46,10 @@ Run commands from the repository root (`make help` lists available targets):
 
 ```bash
 make install
-make check                         # Ruff and the full test suite
+make check                         # Ruff and the full test suite with coverage, as CI runs
 make test TEST_ARGS="tests/test_pipeline.py::test_full_round_runs -q"
+make test-verbose                  # one line per test
+make coverage                      # tests with coverage; fails below fail_under in pyproject.toml
 make format FILES="path/to/changed_file.py"
 make smoke                         # non-interactive CLI example
 make run                           # interactive CLI; accepts ARGS="..."
@@ -81,7 +83,7 @@ run the tests in a Python 3.10 environment; do not use features requiring 3.11+.
 - `evals/` and `notebooks/`: placeholders for evaluation tooling and examples.
 - `docs/`: draft design, team ownership, decisions, and open questions.
 - `Makefile`: local setup, checks, formatting, and CLI commands for uv and pip.
-- `.github/workflows/ci.yml`: Ruff and pytest on Python 3.10 and 3.12.
+- `.github/workflows/ci.yml`: Ruff and pytest with coverage (10% minimum) on Python 3.10 and 3.12.
 
 ## Architecture and shared contracts
 
