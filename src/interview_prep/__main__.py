@@ -12,12 +12,20 @@ from interview_prep.models import Difficulty
 from interview_prep.pipeline import Pipeline
 
 
+def _exit_no_answer(parser: argparse.ArgumentParser) -> None:
+    print('No answer given. Type an answer at the prompt or pass --answer "...".\n', file=sys.stderr)
+    parser.print_help(sys.stderr)
+    parser.exit(2)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Practice one interview question.")
     parser.add_argument("--topic", default="teamwork")
     parser.add_argument("--difficulty", choices=[d.value for d in Difficulty], default="medium")
     parser.add_argument("--answer", help="Answer text. If omitted, you'll be prompted.")
     args = parser.parse_args()
+    if args.answer is not None and not args.answer.strip():
+        _exit_no_answer(parser)
 
     pipeline = Pipeline()
     question = pipeline.ask(args.topic, Difficulty(args.difficulty))
@@ -35,9 +43,7 @@ def main() -> None:
             sys.exit(130)
 
     if not answer.strip():
-        print('No answer given. Type an answer at the prompt or pass --answer "...".\n', file=sys.stderr)
-        parser.print_help(sys.stderr)
-        parser.exit(2)
+        _exit_no_answer(parser)
 
     outcome = pipeline.submit(question, answer)
     fb = outcome.feedback

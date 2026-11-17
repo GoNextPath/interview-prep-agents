@@ -21,11 +21,14 @@ def test_blank_prompt_answer_prints_help(monkeypatch, capsys, typed):
     assert "No answer given" in err
 
 
-def test_blank_answer_flag_prints_help(monkeypatch, capsys):
+@pytest.mark.parametrize("flag_value", ["", "   "])
+def test_blank_answer_flag_fails_before_question(monkeypatch, capsys, flag_value):
     with pytest.raises(SystemExit) as exc:
-        _run(monkeypatch, ["--answer", ""])
+        _run(monkeypatch, ["--answer", flag_value])
     assert exc.value.code == 2
-    assert "No answer given" in capsys.readouterr().err
+    captured = capsys.readouterr()
+    assert "No answer given" in captured.err
+    assert captured.out == ""
 
 
 def test_eof_at_prompt_prints_help(monkeypatch, capsys):
