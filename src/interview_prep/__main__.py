@@ -6,9 +6,16 @@ python -m interview_prep --topic "system design" --difficulty medium
 from __future__ import annotations
 
 import argparse
+import sys
 
 from interview_prep.models import Difficulty
 from interview_prep.pipeline import Pipeline
+
+
+def _exit_no_answer(parser: argparse.ArgumentParser) -> None:
+    print('No answer given. Type an answer at the prompt or pass --answer "...".\n', file=sys.stderr)
+    parser.print_help(sys.stderr)
+    parser.exit(2)
 
 
 def main() -> None:
@@ -17,11 +24,26 @@ def main() -> None:
     parser.add_argument("--difficulty", choices=[d.value for d in Difficulty], default="medium")
     parser.add_argument("--answer", help="Answer text. If omitted, you'll be prompted.")
     args = parser.parse_args()
+    if args.answer is not None and not args.answer.strip():
+        _exit_no_answer(parser)
 
     pipeline = Pipeline()
     question = pipeline.ask(args.topic, Difficulty(args.difficulty))
     print(f"\nQ: {question.prompt}\n")
-    answer = args.answer if args.answer is not None else input("Your answer: ")
+    if args.answer is not None:
+        answer = args.answer
+    else:
+        try:
+            answer = input("Your answer: ")
+        except EOFError:
+            answer = ""
+        except KeyboardInterrupt:
+            # Ctrl-C at the prompt: exit quietly with the conventional SIGINT status, no traceback.
+            print("\nCancelled.", file=sys.stderr)
+            sys.exit(130)
+
+    if not answer.strip():
+        _exit_no_answer(parser)
 
     outcome = pipeline.submit(question, answer)
     fb = outcome.feedback
